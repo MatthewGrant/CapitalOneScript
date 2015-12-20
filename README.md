@@ -1,4 +1,4 @@
-# CapitalOneScript
+# CapitalOneScript (this needs some work, code is too slow, apply numpy vectorization to speed up) 
 Capital One Transaction Challenge (mindsumo.com)
 
 Online businesses of all sorts are increasingly reliant on credit card transactions and the data they create. 
