@@ -1,5 +1,6 @@
-# CapitalOneScript (this needs some work, code is too slow, apply numpy vectorization to speed up) 
-Capital One Transaction Challenge (mindsumo.com)
+# CapitalOneScript
+Capital One Transaction Challenge (mindsumo.com) 
+(this needs some work, code is too slow, apply numpy vectorization to speed up) 
 
 Online businesses of all sorts are increasingly reliant on credit card transactions and the data they create. 
 Information on where clients are, their likely purchasing behaviors, and other bits of data can be used by business to improve their practices. 
