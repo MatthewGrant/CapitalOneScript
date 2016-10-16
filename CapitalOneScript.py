@@ -60,15 +60,16 @@ IDs = [data['Subscription ID'].unique()]
 #Create dataframe for results
 results = pd.DataFrame(columns =['Subscription ID','Duration','Type',])
 
-# Initailize arrays to store data
-IDCol = [0]*27609
-nrowCol = [0]*27609
-deltaTcol=[0]*27609
-durationCol=[0]*27609
-TypeCol=[0]*27609
+# Initailize list to store data
+idCnt = len(IDs)
+IDCol = [0]*idCnt
+nrowCol = [0]*idCnt
+deltaTcol=[0]*idCnt
+durationCol=[0]*idCnt
+TypeCol=[0]*idCnt
 
 # loop through all subscription IDs and pull out ID,#transactions,Duration(max-min),Type(monthly..)
-for item in range(27609): #27609 elements
+for item in range(idCnt): #27609 elements
     
     IDdata = data[data['Subscription ID'] == IDs[0][item]]
     ID = IDdata['Subscription ID'].iloc[0]#IDs[0][item] 
@@ -133,10 +134,41 @@ print 'Greatest Revenue Loss:', revenue_by_year.pct_change().idxmin()
 revenue_by_year.pct_change().order()
 
 # Total Number of Subscribers per year
-data['Subscription ID'].groupby(data['Year']).nunique()
+subscriberCnt = data['Subscription ID'].groupby(data['Year']).nunique()
 
 # Total number of transactions per year
-data['Subscription ID'].groupby(data['Year']).count()
+transactionCnt = data['Subscription ID'].groupby(data['Year']).count()
+
+df = pd.concat([subscriberCnt, transactionCnt,revenue_by_year], axis=1).reset_index()
+df.columns = ['Year',"subscriberCnt","transactionCnt","revenue(USD)"]
+df.head()
+
+#Split data into train and test sets
+y = df.pop('revenue(USD)')
+X = df
+X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.2)
+
+#create linear regression object
+regr = linear_model.LinearRegression()
+
+# Train the model using the training set
+regr.fit(X_train,y_train)
+
+# Coefficients
+regr.coef_
+
+# mean squared error
+np.mean((regr.predict(X_test) - y_test) ** 2)
+
+# variance score: 1 is perfect prediction
+regr.score(X_test, y_test)
+
+plt.scatter(X_test,y_test,color='black')
+plt.plot(X_test,regr.predict(X_test),color='blue')
+plt.xticks(())
+plt.yticks(())
+plt.show()
+
 
 
 
